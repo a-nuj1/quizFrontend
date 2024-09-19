@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import * as Action from "./../redux/questionReducer"
-// import { getServerData } from "../components/screens/Home";
-import data,{answers}from "../components/database/data.js"
+import { getServerData } from "../components/screens/Home.jsx";
+// import data,{answers}from "../components/database/data.js"
 
+import {REACT_APP_SERVER_HOSTNAME}from "../../src/constant.js"
 export const useFetchQuest = () => {
 
     const dispatch = useDispatch();
@@ -17,15 +18,12 @@ export const useFetchQuest = () => {
     useEffect(() => {
       setGetData((prev) => ({ ...prev, loading: true }));
 
-      // const serverUrl = process.env.REACT_APP_SERVER_URL;
 
       // Fetching data from backend
       (async () => {
         try {
-          // const data = await getServerData(`${serverUrl}/api/question`, (data) => data);
-          // const { questions, answers } = data;
-
-          let questions = await data;
+          const [{questions, answers}] = await getServerData(`${REACT_APP_SERVER_HOSTNAME}/api/question`, (data)=>data);
+          // console.log({questions, answers});
   
           if (questions.length > 0) {
             setGetData((prev) => ({ ...prev, loading: false}));

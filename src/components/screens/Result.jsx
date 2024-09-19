@@ -4,34 +4,25 @@ import { Link } from "react-router-dom";
 
 import { resetResultAction } from "../../redux/resultReducer";
 import { resetAction } from "../../redux/questionReducer";
+import { userResults } from "../../hooks/setRes.js";
 
 export const earnPointsFn = (result, answers) => {
   return result.map((userInput, i) => {
     const correctAnswer = answers[i].answer || answers[i]; // Either handle `answer` or directly the value
-    const questionType = answers[i].type || "default"; // Assume a default type if type isn't specified
+    const questionType = answers[i].type || "default"; 
 
-    console.log(`Question ${i + 1}: Type - ${questionType}`);
-    console.log(`User Input: ${userInput}`);
-    console.log(`Correct Answer: ${correctAnswer}`);
-
-    // Handle different question types
     if (questionType === "descriptive") {
-      // Random score between 5 and 10 for descriptive answers
       const descriptiveScore = Math.floor(Math.random() * 6) + 5;
-      console.log(`Descriptive answer score: ${descriptiveScore}`);
       return descriptiveScore;
     }
 
     if (questionType === "fill-in-the-blank") {
-      // Compare fill-in-the-blank answer (lowercase comparison)
+
       const isCorrect = correctAnswer.toLowerCase() === userInput.toLowerCase();
-      console.log(`Fill-in-the-blank match: ${isCorrect}`);
-      return isCorrect ? 10 : 0;  // 10 points for correct answers
+      return isCorrect ? 10 : 0;  
     }
 
-    // For MCQ/boolean, compare indices or answers
     const isCorrect = correctAnswer === userInput;
-    console.log(`MCQ/Boolean match: ${isCorrect}`);
     return isCorrect ? 10 : 0;
   })
   .map((score, index, array) => {
@@ -41,7 +32,7 @@ export const earnPointsFn = (result, answers) => {
     }
     return score;
   })
-  .reduce((totalScore, currentScore) => totalScore + currentScore, 0); // Sum the scores
+  .reduce((totalScore, currentScore) => totalScore + currentScore, 0); 
 }
 
 function Result() {
@@ -55,12 +46,9 @@ function Result() {
 
   const totalPoints = quest.length * 10;
   const earnPoints = earnPointsFn(result, answers);
-  useEffect(() => {
-    console.log(` User Id : ${userId}`);
-    console.log(`Result : ${result}`);
-    console.log(` Total Points : ${totalPoints}`);
-    console.log(` Total Earn Points : ${earnPoints}`);
-  });
+
+  // user result
+  userResults({ result, username: userId, points: earnPoints });
 
 
   const submitHandler = () => {

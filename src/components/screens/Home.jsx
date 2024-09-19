@@ -67,4 +67,6 @@ export async function postServerData(url,result, call){
 }
 
 
+
+
 // getServerData('http://localhost:8000/api/result')

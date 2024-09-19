@@ -1,0 +1,1 @@
+export const REACT_APP_SERVER_HOSTNAME="http://localhost:8000"
