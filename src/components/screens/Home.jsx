@@ -11,7 +11,9 @@ function Home() {
 
   const inputRef = useRef(null);
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+
+  
   const startQuiz = () => {
     if(inputRef.current?.value){
       dispatch(setUserId(inputRef.current?.value))

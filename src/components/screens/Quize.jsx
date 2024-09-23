@@ -8,6 +8,10 @@ import { updateResAction } from "../../hooks/setRes";
 
 function Quize() {
 
+
+  const [timer, setTimer] = useState(30);
+
+
   const [checked, setChecked] = useState(undefined);
 
   const result = useSelector(state => state.result.result);
@@ -18,23 +22,65 @@ function Quize() {
 
   // next btn handler
   const nextHandler = () => {
-    if(count < quest.length){
-      dispatch(moveNextQuest());
-      
-      if(result.length <= count){
+    if (count < quest.length) {
+      if (result.length <= count) {
         dispatch(pushAns(checked));
       }
+      dispatch(moveNextQuest());
     }
-
     setChecked(undefined);
+    resetTimer();
   };
 
 
 
-  const prevHandler = () => {
-    if(count > 0)
-      dispatch(movePrevQuest());
+
+
+
+  // added Timer function 
+
+  const resetTimer = () => {
+    setTimer(30); 
   };
+
+
+  // use effect to reduce timer every second
+
+  useEffect(() => {
+    if (timer > 0) {
+      const timerId = setInterval(() => {
+        setTimer((prevTime) => prevTime - 1);
+      }, 1000);
+
+      return () => clearInterval(timerId); 
+    } 
+    else {
+      nextHandler(); 
+    }
+  }, [timer]); 
+
+
+  useEffect(() => {
+    resetTimer(); 
+  }, [count]);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   const onCheckedHandler = (check) => {
     setChecked(check);
@@ -47,20 +93,23 @@ function Quize() {
     return <Navigate to="/result" replace={true}/>
   }
 
+
+
+
   return (
     <div className="container">
       <h1 className="title text-light">Quize Time !</h1>
+
+
+      <div className="timer">
+        <h2 className="text-light">Time left: {timer} seconds</h2>
+      </div>
 
       {/* qustions will display here */}
       <Questions onCheckedHandler={onCheckedHandler}/>
 
 
       <div className="grid">
-        {
-          count > 0 ? <button className="btn prev" onClick={prevHandler}>
-          Prev
-        </button> : <div> </div>
-        }
         <button className="btn next" onClick={nextHandler}>
           Next
         </button>

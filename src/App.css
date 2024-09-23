@@ -232,3 +232,13 @@ input[type=radio]:checked ~ .text-primary{
   color: #cecece;
 }
 
+
+
+
+
+.timer {
+  margin: 20px 0;
+  font-size: 1.5em;
+  color: #ffcc00; 
+  text-align: center;
+}
